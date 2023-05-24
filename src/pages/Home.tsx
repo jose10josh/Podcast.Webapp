@@ -16,7 +16,7 @@ const Home = () => {
 
   return (
     <div>
-      <p>Home page2</p>
+      <p className="text-3xl font-bold underline">Home page</p>
       {podcastList.map((podcast, index) => (
         <p key={index}>{podcast['im:name'].label}</p>
       ))}

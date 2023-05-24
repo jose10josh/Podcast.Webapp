@@ -5,6 +5,8 @@ import { Home } from '@src/pages/Home';
 import { Detail } from '@src/pages/Detail';
 import { Header } from '@src/components/Header';
 
+import './index.css';
+
 const App = () => {
   return (
     <ProviderPodcast>

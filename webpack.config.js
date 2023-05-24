@@ -15,7 +15,10 @@ module.exports = {
   target: 'web',
   mode: 'production',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      '@src': path.resolve(__dirname, 'src/')
+    }
   },
   module: {
     rules: [
@@ -43,8 +46,8 @@ module.exports = {
         }
       },
       {
-        test: /\.css|.scss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       },
       {
         test: /\.png/,
