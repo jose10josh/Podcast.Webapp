@@ -9,10 +9,9 @@ export const fetchPodcasts = async ():Promise<Podcast[]> => {
     }
     const data:{feed:{entry:Podcast[]}} = await response.json();
     const podcasts = data.feed.entry;
-    console.log('fetched', podcasts);
     return podcasts;
   } catch (error) {
-    console.log("Ocurrio un error", error);
+    console.error("Ocurrio un error", error);
     throw new Error('Ocurrio un error');
   }
 
