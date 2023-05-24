@@ -2,7 +2,7 @@ import { usePodcast } from '@src/context/podcastContext';
 import React, { useEffect } from 'react';
 
 const Home = () => {
-  const { loading, error, podcastList, getPodcastList } = usePodcast();
+  const { loading, podcastList, getPodcastList } = usePodcast();
 
   useEffect(() => {
     if (podcastList.length == 0) {
@@ -18,7 +18,7 @@ const Home = () => {
     <div>
       <p>Home page2</p>
       {podcastList.map((podcast, index) => (
-        <p key={index}>{podcast['im:image'][0].label}</p>
+        <p key={index}>{podcast['im:name'].label}</p>
       ))}
     </div>
   );
