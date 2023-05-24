@@ -58,24 +58,22 @@ function useLocalStorage<TValue>(localName:string, initialValue:TValue) {
 
   const fetchItems = async ():Promise<TValue> => {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          const localStorageItem = localStorage.getItem(localName);
-          let parsedItems:TValue = initialValue;
+      try {
+        const localStorageItem = localStorage.getItem(localName);
+        let parsedItems:TValue = initialValue;
 
-          if(!localStorageItem){
-            localStorage.setItem(localName, JSON.stringify(parsedItems));
-          } else {
-            parsedItems = JSON.parse(localStorageItem);
-          }
-          onSuccess(parsedItems);
-          resolve(parsedItems);
-        } catch (error) {
-          onError();
-          console.error("An error ocurred: ", error);
-          reject(error);
+        if(!localStorageItem){
+          localStorage.setItem(localName, JSON.stringify(parsedItems));
+        } else {
+          parsedItems = JSON.parse(localStorageItem);
         }
-      }, 2000);
+        onSuccess(parsedItems);
+        resolve(parsedItems);
+      } catch (error) {
+        onError();
+        console.error("An error ocurred: ", error);
+        reject(error);
+      }
     })
   }
 

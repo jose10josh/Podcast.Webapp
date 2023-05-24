@@ -1,28 +1,13 @@
-interface RootObject {
-  feed: Feed;
-}
-
-interface Feed {
-  author:  Author;
-  entry:   Podcast[];
-  icon:    Icon;
-  id:      Icon;
-  link:    Link[];
-  rights:  Icon;
-  title:   Icon;
-  updated: Icon;
-}
-
-interface Author {
-  name: Icon;
-  uri:  Icon;
-}
-
-interface Icon {
-  label: string;
-}
-
 interface Podcast {
+  id: string
+  title: string
+  description: string
+  image: string
+  author: string
+}
+
+
+interface fetchedPodcast {
   category:         Category;
   id:               ID;
   "im:artist":      IMArtist;
@@ -37,102 +22,111 @@ interface Podcast {
   title:            Icon;
 }
 
-interface Category {
-  attributes: CategoryAttributes;
+interface Author {
+  name: Icon;
+  uri:  Icon;
 }
 
-interface CategoryAttributes {
-  "im:id": string;
-  label:   PurpleLabel;
-  scheme:  string;
-  term:    PurpleLabel;
+interface Icon {
+  label: string;
 }
 
-enum PurpleLabel {
-  Music = "Music",
-  MusicCommentary = "Music Commentary",
-  MusicHistory = "Music History",
-  MusicInterviews = "Music Interviews",
-}
+// interface Category {
+//   attributes: CategoryAttributes;
+// }
 
-interface ID {
-  attributes: IDAttributes;
-  label:      string;
-}
+// interface CategoryAttributes {
+//   "im:id": string;
+//   label:   PurpleLabel;
+//   scheme:  string;
+//   term:    PurpleLabel;
+// }
 
-interface IDAttributes {
-  "im:id": string;
-}
+// enum PurpleLabel {
+//   Music = "Music",
+//   MusicCommentary = "Music Commentary",
+//   MusicHistory = "Music History",
+//   MusicInterviews = "Music Interviews",
+// }
 
-interface IMArtist {
-  attributes?: IMArtistAttributes;
-  label:       string;
-}
+// interface ID {
+//   attributes: IDAttributes;
+//   label:      string;
+// }
 
-interface IMArtistAttributes {
-  href: string;
-}
+// interface IDAttributes {
+//   "im:id": string;
+// }
 
-interface IMContentType {
-  attributes: IMContentTypeAttributes;
-}
+// interface IMArtist {
+//   attributes?: IMArtistAttributes;
+//   label:       string;
+// }
 
-interface IMContentTypeAttributes {
-  label: FluffyLabel;
-  term:  FluffyLabel;
-}
+// interface IMArtistAttributes {
+//   href: string;
+// }
 
-enum FluffyLabel {
-  Podcast = "Podcast",
-}
+// interface IMContentType {
+//   attributes: IMContentTypeAttributes;
+// }
 
-interface IMImage {
-  attributes: IMImageAttributes;
-  label:      string;
-}
+// interface IMContentTypeAttributes {
+//   label: FluffyLabel;
+//   term:  FluffyLabel;
+// }
 
-interface IMImageAttributes {
-  height: string;
-}
+// enum FluffyLabel {
+//   Podcast = "Podcast",
+// }
 
-interface IMPrice {
-  attributes: IMPriceAttributes;
-  label:      IMPriceLabel;
-}
+// interface IMImage {
+//   attributes: IMImageAttributes;
+//   label:      string;
+// }
 
-interface IMPriceAttributes {
-  amount:   string;
-  currency: Currency;
-}
+// interface IMImageAttributes {
+//   height: string;
+// }
 
-enum Currency {
-  Usd = "USD",
-}
+// interface IMPrice {
+//   attributes: IMPriceAttributes;
+//   label:      IMPriceLabel;
+// }
 
-enum IMPriceLabel {
-  Get = "Get",
-}
+// interface IMPriceAttributes {
+//   amount:   string;
+//   currency: Currency;
+// }
 
-interface IMReleaseDate {
-  attributes: Icon;
-  label:      Date;
-}
+// enum Currency {
+//   Usd = "USD",
+// }
 
-interface Link {
-  attributes: LinkAttributes;
-}
+// enum IMPriceLabel {
+//   Get = "Get",
+// }
 
-interface LinkAttributes {
-  href:  string;
-  rel:   Rel;
-  type?: Type;
-}
+// interface IMReleaseDate {
+//   attributes: Icon;
+//   label:      Date;
+// }
 
-enum Rel {
-  Alternate = "alternate",
-  Self = "self",
-}
+// interface Link {
+//   attributes: LinkAttributes;
+// }
 
-enum Type {
-  TextHTML = "text/html",
-}
+// interface LinkAttributes {
+//   href:  string;
+//   rel:   Rel;
+//   type?: Type;
+// }
+
+// enum Rel {
+//   Alternate = "alternate",
+//   Self = "self",
+// }
+
+// enum Type {
+//   TextHTML = "text/html",
+// }

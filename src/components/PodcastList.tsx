@@ -7,9 +7,9 @@ type Props = {
 
 const PodcastList = ({ podcastList }: Props) => {
   return (
-    <div className="grid grid-cols-6 md:grid-cols-4 gap-6">
-      {podcastList.map((podcast, index) => (
-        <PodcastItem key={index} podcast={podcast} />
+    <div className="grid grid-cols-6 md:grid-cols-4 gap-8">
+      {podcastList.map((podcast) => (
+        <PodcastItem key={podcast.id} podcast={podcast} />
       ))}
     </div>
   );
