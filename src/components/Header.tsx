@@ -3,28 +3,11 @@ import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <header>
+    <header className="flex justify-between items-center p-8 md:px-12 md:py-6 shadow-lg">
       <div>
-        <NavLink to="/">Logo</NavLink>
+        <NavLink to="/">Podcaster</NavLink>
       </div>
-      <nav>
-        <NavLink
-          to="/"
-          className={({ isActive, isPending }) =>
-            isPending ? 'pending' : isActive ? 'active' : ''
-          }
-        >
-          home
-        </NavLink>
-        <NavLink
-          to="/detail"
-          className={({ isActive, isPending }) =>
-            isPending ? 'pending' : isActive ? 'active' : ''
-          }
-        >
-          detail
-        </NavLink>
-      </nav>
+      <p>Loading</p>
     </header>
   );
 };

@@ -1,3 +1,4 @@
+import { PodcastList } from '@src/components/PodcastList';
 import { usePodcast } from '@src/context/podcastContext';
 import React, { useEffect } from 'react';
 
@@ -16,10 +17,7 @@ const Home = () => {
 
   return (
     <div>
-      <p className="text-3xl font-bold underline">Home page</p>
-      {podcastList.map((podcast, index) => (
-        <p key={index}>{podcast['im:name'].label}</p>
-      ))}
+      <PodcastList podcastList={podcastList} />
     </div>
   );
 };
