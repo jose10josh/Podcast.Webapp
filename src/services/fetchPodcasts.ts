@@ -5,7 +5,7 @@ export const fetchPodcasts = async ():Promise<Podcast[]> => {
   try {
     const response = await fetch(`${API_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`);
     if (!response.ok) {
-      throw new Error('Ocurrio un error');
+      throw new Error('Ocurrio un error fetchPodcasr from API');
     }
     const data:{feed:{entry:fetchedPodcast[]}} = await response.json();
     const podcasts = data.feed.entry;
@@ -20,8 +20,8 @@ export const fetchPodcasts = async ():Promise<Podcast[]> => {
 
     return newPodcastList;
   } catch (error) {
-    console.error("Ocurrio un error", error);
-    throw new Error('Ocurrio un error');
+    console.error("Ocurrio un error fetchPodcasr from API", error);
+    throw new Error('Ocurrio un error fetchPodcasr from API');
   }
 }
 
@@ -29,12 +29,12 @@ export const fetchPodcastDetail = async (id:number):Promise<PodcastDetail> => {
   try {
     const response = await fetch(`${API_URL}/lookup?id=${id}&media=podcast&entity=podcastEpisode`);
     if (!response.ok) {
-      throw new Error('Ocurrio un error');
+      throw new Error('Ocurrio un error fetchPodcasr -> fetchPodcastDetail from API');
     }
 
     const {results}:{results:any} = await response.json();
     if(!results || results.length === 0) {
-      throw new Error('Ocurrio un error');
+      throw new Error('Ocurrio un error  fetchPodcasr -> fetchPodcastDetail from API');
     }
 
     const podcast:Podcast = {
@@ -62,7 +62,7 @@ export const fetchPodcastDetail = async (id:number):Promise<PodcastDetail> => {
     })
     return {...podcast, episodes: newEpisode};
   } catch (error) {
-    console.error("Ocurrio un error", error);
-    throw new Error('Ocurrio un error');
+    console.error("Ocurrio un error  fetchPodcasr -> fetchPodcastDetail from API", error);
+    throw new Error('Ocurrio un error  fetchPodcasr -> fetchPodcastDetail from API');
   }
 }

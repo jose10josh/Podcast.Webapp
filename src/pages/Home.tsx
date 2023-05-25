@@ -3,12 +3,14 @@ import { usePodcast } from '@src/context/podcastContext';
 import React, { useEffect } from 'react';
 
 const Home = () => {
-  const { loading, podcastList, searchVal, getPodcastList, setSearchVal } = usePodcast();
+  const { loading, podcastList, searchVal, getPodcastList, setSearchVal, updateLoading } = usePodcast();
 
   useEffect(() => {
+    updateLoading(true);
     if (podcastList.length == 0) {
       getPodcastList();
     }
+    updateLoading(false);
   }, []);
 
   if (loading) {

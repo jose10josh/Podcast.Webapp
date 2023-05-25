@@ -19,7 +19,12 @@ const Detail = () => {
   const [notfound, setNotfound] = useState<boolean>(false);
   // const [activeEpisode, setActiveEpisode] = useState<PodcastEpisode>({} as PodcastEpisode);
   const { loading, updateLoading } = usePodcast();
-  const { itemList: podcast, saveItem, fetchItems } = useLocalStorage<PodcastDetail>(`PodcastDetail-${id}`, {} as PodcastDetail);
+  const {
+    itemList: podcast,
+    saveItem,
+    fetchItems,
+    deleteItem
+  } = useLocalStorage<PodcastDetail>(`PodcastDetail-${id}`, {} as PodcastDetail);
 
   useEffect(() => {
     if (id === undefined) {
@@ -35,18 +40,17 @@ const Detail = () => {
           const podcastDetail = await fetchPodcastDetail(+id);
           if (podcastDetail === undefined) {
             setNotfound(true);
-            console.log('Delete local storage');
+            deleteItem();
           } else {
             if (Object.keys(podcastDetail).length === 0) {
-              //delete local storage
-              console.log('Delete local storage');
+              deleteItem();
               setNotfound(true);
             } else {
               saveItem(podcastDetail);
             }
           }
         } catch (error) {
-          console.log('Delete local storage');
+          deleteItem();
         }
       }
       updateLoading(false);

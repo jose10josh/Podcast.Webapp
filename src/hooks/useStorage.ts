@@ -1,3 +1,4 @@
+import { StoredTime } from "@src/utils/constants";
 import { useReducer } from "react";
 
 
@@ -63,15 +64,25 @@ function useLocalStorage<TValue>(localName:string, initialValue:TValue) {
         let parsedItems:TValue = initialValue;
 
         if(!localStorageItem){
-          localStorage.setItem(localName, JSON.stringify(parsedItems));
+          const newStorage = JSON.stringify(parsedItems).concat(`{||}${new Date().getTime()}`)
+          localStorage.setItem(localName, newStorage);
         } else {
-          parsedItems = JSON.parse(localStorageItem);
+          const actualTime = new Date().getTime();
+          const oldTime = parseInt(localStorageItem.split(`{||}`)[1]);
+          if(actualTime - oldTime > StoredTime){
+            deleteItem();
+            const newStorage = JSON.stringify(parsedItems).concat(`{||}${new Date().getTime()}`)
+            localStorage.setItem(localName, newStorage);
+          } else {
+            const cleanStorage = localStorageItem.split(`{||}`)[0];
+            parsedItems = JSON.parse(cleanStorage);
+          }
         }
         onSuccess(parsedItems);
         resolve(parsedItems);
       } catch (error) {
         onError();
-        console.error("An error ocurred: ", error);
+        console.error("An error ocurred: useLocalStorage -> fetchItems", error);
         reject(error);
       }
     })
@@ -81,14 +92,27 @@ function useLocalStorage<TValue>(localName:string, initialValue:TValue) {
   const saveItem = (itemList:TValue) => {
     try {
       onAddNew(itemList);
-      localStorage.setItem(localName, JSON.stringify(itemList));
+      const newStorage = JSON.stringify(itemList).concat(`{||}${new Date().getTime()}`)
+      localStorage.setItem(localName, newStorage);
     } catch (error) {
       onError();
-      console.error("An error ocurred: ", error)
+      console.error("An error ocurred: useStorage -> saveItem", error)
     }
   }
 
-  return {itemList: itemList as TValue, saveItem, fetchItems, loading, error};
+
+  const deleteItem = () => {
+    localStorage.removeItem(localName);
+  }
+
+  return {
+    itemList: itemList as TValue,
+    loading,
+    error,
+    saveItem,
+    fetchItems,
+    deleteItem
+  };
 }
 
 export {useLocalStorage};

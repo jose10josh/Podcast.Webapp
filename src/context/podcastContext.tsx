@@ -38,11 +38,10 @@ const useProviderPodcast = () => {
     searchedPodcasts = itemList.filter(
       (item) => item.title.toLowerCase().includes(searchedText) || item.author.toLowerCase().includes(searchedText)
     );
-    console.log(searchedPodcasts);
   }
 
   const updateLoading = (state: boolean) => {
-    let delay = 1000;
+    let delay = 500;
     if (state) {
       delay = 0;
     }
