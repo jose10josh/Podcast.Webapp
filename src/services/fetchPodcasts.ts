@@ -3,9 +3,9 @@ import { API_URL } from "@src/utils/constants";
 
 export const fetchPodcasts = async ():Promise<Podcast[]> => {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`);
     if (!response.ok) {
-      throw new Error('Request failed');
+      throw new Error('Ocurrio un error');
     }
     const data:{feed:{entry:fetchedPodcast[]}} = await response.json();
     const podcasts = data.feed.entry;
@@ -25,5 +25,36 @@ export const fetchPodcasts = async ():Promise<Podcast[]> => {
     console.error("Ocurrio un error", error);
     throw new Error('Ocurrio un error');
   }
+}
 
+export const fetchPodcastDetail = async (id:number):Promise<{podcast:Podcast, episodes:PodcastEpisode[]}> => {
+  try {
+    const response = await fetch(`${API_URL}/lookup?id=${id}&media=podcast&entity=podcastEpisode`);
+    if (!response.ok) {
+      throw new Error('Ocurrio un error');
+    }
+
+    const {results}:{results:any} = await response.json();
+    const podcast:Podcast = {
+      id : results[0].collectionId,
+      title : results[0].collectionName,
+      description : results[1].description,
+      image : results[0].artworkUrl100,
+      author : results[0].artistName
+    };
+
+    const episodes:PodcastEpisode[] = results.slice(1).map((podcast:PodcastEpisode) => ({
+      collectionViewUrl : podcast.collectionViewUrl,
+      episodeUrl : podcast.episodeUrl,
+      description : podcast.description,
+      trackId : podcast.trackId,
+      trackName : podcast.trackName,
+      releaseDate : podcast.releaseDate,
+      trackTimeMillis: podcast.trackTimeMillis
+    }))
+    return {podcast, episodes};
+  } catch (error) {
+    console.error("Ocurrio un error", error);
+    throw new Error('Ocurrio un error');
+  }
 }

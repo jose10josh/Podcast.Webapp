@@ -6,6 +6,19 @@ interface Podcast {
   author: string
 }
 
+interface PodcastEpisode {
+  collectionViewUrl:     string;
+  episodeUrl:            string;
+  description:           string;
+  trackId:               number;
+  trackName:             string;
+  releaseDate:           string;
+  trackTimeMillis:       number;
+}
+
+interface PodcastDetail extends Podcast {
+  episodes: PodcastEpisode[]
+}
 
 interface fetchedPodcast {
   category:         Category;
@@ -22,14 +35,14 @@ interface fetchedPodcast {
   title:            Icon;
 }
 
-interface Author {
-  name: Icon;
-  uri:  Icon;
-}
+// interface Author {
+//   name: Icon;
+//   uri:  Icon;
+// }
 
-interface Icon {
-  label: string;
-}
+// interface Icon {
+//   label: string;
+// }
 
 // interface Category {
 //   attributes: CategoryAttributes;

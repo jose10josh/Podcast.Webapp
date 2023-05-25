@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -8,9 +8,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
-    assetModuleFilename: 'assets/images/[hash][ext][query]'
+    path: path.resolve(__dirname, '/dist'),
+    publicPath: '/',
+    filename: '[name].[contenthash].js'
   },
   target: 'web',
   mode: 'production',
@@ -48,10 +48,6 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.png/,
-        type: 'asset/resource'
       }
     ]
   },
@@ -60,9 +56,6 @@ module.exports = {
       inject: true,
       template: './public/index.html',
       filename: './index.html'
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'assets/[name].[contenthash].css'
     }),
     new CleanWebpackPlugin()
   ],

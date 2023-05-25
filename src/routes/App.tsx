@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ProviderPodcast } from '@src/context/podcastContext';
+import { Layout } from '@src/components/Layout';
 import { Home } from '@src/pages/Home';
 import { Podcast } from '@src/pages/Podcast';
+import { NotFound } from '@src/pages/NotFound';
 
 import './index.css';
-import { Layout } from '@src/components/Layout';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/podcast/:id" element={<Podcast />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </BrowserRouter>

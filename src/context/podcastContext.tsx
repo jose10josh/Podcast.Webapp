@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 import { useLocalStorage } from '@src/hooks/useStorage';
 import { fetchPodcasts } from '@src/services/fetchPodcasts';
 
@@ -12,24 +6,16 @@ type PodcastContextType = {
   loading: boolean;
   error: boolean;
   podcastList: Podcast[];
-  podcastDetail: Podcast[];
   getPodcastList: () => void;
+  updateLoading: (state: boolean) => void;
 };
 
-const PodcastContext = createContext<PodcastContextType>(
-  {} as PodcastContextType
-);
+const PodcastContext = createContext<PodcastContextType>({} as PodcastContextType);
 
-export const ProviderPodcast = ({
-  children
-}: {
-  children: React.ReactNode;
-}) => {
+export const ProviderPodcast = ({ children }: { children: React.ReactNode }) => {
   const auth = useProviderPodcast();
 
-  return (
-    <PodcastContext.Provider value={auth}>{children}</PodcastContext.Provider>
-  );
+  return <PodcastContext.Provider value={auth}>{children}</PodcastContext.Provider>;
 };
 
 export const usePodcast = () => {
@@ -37,17 +23,15 @@ export const usePodcast = () => {
 };
 
 const useProviderPodcast = () => {
-  const {
-    itemList,
-    saveItem,
-    fetchItems,
-    loading: storageLoading
-  } = useLocalStorage<Podcast[]>('PodcastList', []);
-
+  const { itemList, saveItem, fetchItems } = useLocalStorage<Podcast[]>('PodcastList', []);
   const [podcasts, setPodcasts] = useState<Podcast[]>(itemList);
-  const [podcastsDetail, setPodcastsDetail] = useState<Podcast[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+
+  const updateLoading = (state: boolean) => {
+    setLoading(state);
+  };
 
   const getPodcasts = useCallback(async () => {
     const response = await fetchPodcasts();
@@ -75,8 +59,7 @@ const useProviderPodcast = () => {
     loading,
     error,
     podcastList: podcasts,
-    podcastDetail: podcastsDetail,
-
-    getPodcastList
+    getPodcastList,
+    updateLoading
   };
 };
