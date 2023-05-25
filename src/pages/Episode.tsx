@@ -1,35 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchPodcastDetail } from '@src/services/fetchPodcasts';
 import { useLocalStorage } from '@src/hooks/useStorage';
 import { timeFormat } from '@src/utils/timeFormat';
 import { usePodcast } from '@src/context/podcastContext';
 import { PodcastInfoCard } from '@src/components/PodcastInfoCard';
+import { AudioPlayer } from '@src/components/AudioPlayer';
 
-const Podcast = () => {
+const Episode = () => {
   const params = useParams();
   const id = Number(params.id);
+  const episodeId = Number(params.episodeId);
   const [notfound, setNotfound] = useState<boolean>(false);
   const { loading, updateLoading } = usePodcast();
+  const [activeEpisode, setActiveEpisode] = useState<PodcastEpisode>({} as PodcastEpisode);
   const { itemList: podcast, saveItem, fetchItems } = useLocalStorage<PodcastDetail>(`PodcastDetail-${id}`, {} as PodcastDetail);
 
   useEffect(() => {
-    if (id === undefined) {
+    if (id === undefined || episodeId === undefined) {
       setNotfound(true);
       return;
     }
+
     const getPodcastDetail = async () => {
-      const res: PodcastDetail = await fetchItems();
       updateLoading(true);
+      const res: PodcastDetail = await fetchItems();
+      const active = res.episodes[episodeId];
+
+      setActiveEpisode(active);
       if (Object.keys(res).length === 0) {
         try {
-          const podcastDetail = await fetchPodcastDetail(+id);
+          const podcastDetail = await fetchPodcastDetail(id);
           if (Object.keys(podcastDetail).length === 0) {
             //delete local storage
             console.log('Delete local storage');
             setNotfound(true);
           } else {
             saveItem(podcastDetail);
+            const active = podcastDetail.episodes[episodeId];
+            setActiveEpisode(active);
           }
         } catch (error) {
           console.log('Delete local storage');
@@ -58,37 +67,14 @@ const Podcast = () => {
         description={podcast?.description}
       />
       <section className="w-9/12">
-        <div className="shadow-xl p-5 mb-12">
-          <h6 className="font-bold text-xl">Episodes: {Object.keys(podcast.episodes).length}</h6>
-        </div>
-        <div className="shadow-xl p-5 flex">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left border-b">
-                <th>Title</th>
-                <th>Date</th>
-                <th>Duration</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              {Object.keys(podcast.episodes).map((IKey: string) => {
-                const episode = podcast.episodes[+IKey];
-                return (
-                  <tr key={episode.trackId} className="border-b">
-                    <td className="py-2 w-4/5">
-                      <NavLink to={`episode/${episode.trackId}`}>{episode.trackName}</NavLink>
-                    </td>
-                    <td className="py-2">{new Date(episode.releaseDate).toLocaleDateString()}</td>
-                    <td className="py-2">{timeFormat(episode.trackTimeMillis)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <AudioPlayer
+          title={activeEpisode?.trackName}
+          description={activeEpisode?.description}
+          episodeUrl={activeEpisode?.episodeUrl}
+        />
       </section>
     </div>
   );
 };
 
-export { Podcast };
+export { Episode };

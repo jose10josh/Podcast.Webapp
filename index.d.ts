@@ -17,7 +17,7 @@ interface PodcastEpisode {
 }
 
 interface PodcastDetail extends Podcast {
-  episodes: PodcastEpisode[]
+  episodes: Record<number, PodcastEpisode>
 }
 
 interface fetchedPodcast {
