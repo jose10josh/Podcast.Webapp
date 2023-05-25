@@ -12,7 +12,7 @@ import './index.css';
 const App = () => {
   return (
     <ProviderPodcast>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />

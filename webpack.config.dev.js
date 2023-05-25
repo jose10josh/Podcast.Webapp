@@ -1,14 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, '/dist'),
+    path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: '[name].[contenthash].js'
+    filename: 'main.js'
   },
   target: 'web',
   mode: 'development',
@@ -28,8 +27,7 @@ module.exports = {
             jsc: {
               parser: {
                 syntax: 'typescript',
-                tsx: true,
-                minify: false
+                tsx: true
               }
             }
           }
@@ -60,6 +58,6 @@ module.exports = {
   devServer: {
     watchFiles: path.join(__dirname, './**'),
     historyApiFallback: true,
-    port: 3000
+    port: 8080
   }
 };

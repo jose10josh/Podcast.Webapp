@@ -1,6 +1,6 @@
 import { PodcastList } from '@src/components/PodcastList';
-import { usePodcast } from '@src/context/podcastContext';
 import React, { useEffect } from 'react';
+import { usePodcast } from '@src/context/podcastContext';
 
 const Home = () => {
   const { loading, podcastList, searchVal, getPodcastList, setSearchVal, updateLoading } = usePodcast();
