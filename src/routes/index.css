@@ -6,6 +6,9 @@
 .color-main {
   color: rgb(53, 108, 227);
 }
+.bg-main {
+  background-color: rgb(53, 108, 227);
+}
 
 
 audio::-webkit-media-controls-panel {

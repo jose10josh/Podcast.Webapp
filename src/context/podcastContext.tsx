@@ -6,8 +6,10 @@ type PodcastContextType = {
   loading: boolean;
   error: boolean;
   podcastList: Podcast[];
+  searchVal: string;
   getPodcastList: () => void;
   updateLoading: (state: boolean) => void;
+  setSearchVal: (val: string) => void;
 };
 
 const PodcastContext = createContext<PodcastContextType>({} as PodcastContextType);
@@ -24,18 +26,34 @@ export const usePodcast = () => {
 
 const useProviderPodcast = () => {
   const { itemList, saveItem, fetchItems } = useLocalStorage<Podcast[]>('PodcastList', []);
-  const [podcasts, setPodcasts] = useState<Podcast[]>(itemList);
-
+  const [searchVal, setSearchVal] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
+  let searchedPodcasts: Podcast[] = [];
+  if (searchVal.length <= 0) {
+    searchedPodcasts = itemList;
+  } else {
+    const searchedText: string = searchVal.toLowerCase();
+    searchedPodcasts = itemList.filter(
+      (item) => item.title.toLowerCase().includes(searchedText) || item.author.toLowerCase().includes(searchedText)
+    );
+    console.log(searchedPodcasts);
+  }
+
   const updateLoading = (state: boolean) => {
-    setLoading(state);
+    let delay = 1000;
+    if (state) {
+      delay = 0;
+    }
+    setTimeout(() => {
+      setLoading(state);
+    }, delay);
   };
 
   const getPodcasts = useCallback(async () => {
     const response = await fetchPodcasts();
-    setPodcasts(response);
+    searchedPodcasts = response;
     saveItem(response);
   }, [fetchPodcasts]);
 
@@ -46,7 +64,7 @@ const useProviderPodcast = () => {
       if (res.length == 0) {
         getPodcasts();
       } else {
-        setPodcasts(res);
+        searchedPodcasts = res;
       }
     } catch (error) {
       setError(true);
@@ -58,8 +76,10 @@ const useProviderPodcast = () => {
   return {
     loading,
     error,
-    podcastList: podcasts,
+    podcastList: searchedPodcasts,
+    searchVal,
     getPodcastList,
-    updateLoading
+    updateLoading,
+    setSearchVal
   };
 };

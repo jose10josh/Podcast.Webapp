@@ -3,13 +3,13 @@ import { usePodcast } from '@src/context/podcastContext';
 import React, { useEffect } from 'react';
 
 const Home = () => {
-  const { loading, podcastList, getPodcastList } = usePodcast();
+  const { loading, podcastList, searchVal, getPodcastList, setSearchVal } = usePodcast();
 
   useEffect(() => {
     if (podcastList.length == 0) {
       getPodcastList();
     }
-  }, [podcastList]);
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -17,6 +17,16 @@ const Home = () => {
 
   return (
     <div>
+      <div className="mb-12 flex items-center justify-end">
+        <p className="px-2 text-white font-bold bg-main rounded-lg mr-2">{podcastList.length}</p>
+        <input
+          className="border border-black rounded-md px-2 py-1 w-1/5"
+          placeholder="Friday Night..."
+          type="text"
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
+        />
+      </div>
       <PodcastList podcastList={podcastList} />
     </div>
   );
