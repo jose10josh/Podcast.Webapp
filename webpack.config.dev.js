@@ -58,6 +58,16 @@ module.exports = {
   devServer: {
     watchFiles: path.join(__dirname, './**'),
     historyApiFallback: true,
-    port: 8080
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://itunes.apple.com',
+        secure: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   }
 };
