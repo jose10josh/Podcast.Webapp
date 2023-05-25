@@ -1,79 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPodcastDetail } from '@src/services/fetchPodcasts';
-import { useLocalStorage } from '@src/hooks/useStorage';
-import { timeFormat } from '@src/utils/timeFormat';
-import { usePodcast } from '@src/context/podcastContext';
-import { PodcastInfoCard } from '@src/components/PodcastInfoCard';
-import { AudioPlayer } from '@src/components/AudioPlayer';
+import { useDetail } from './Detail';
 
 const Episode = () => {
+  const { loading, notfound, podcast, setNotfound } = useDetail();
   const params = useParams();
-  const id = Number(params.id);
   const episodeId = Number(params.episodeId);
-  const [notfound, setNotfound] = useState<boolean>(false);
-  const { loading, updateLoading } = usePodcast();
   const [activeEpisode, setActiveEpisode] = useState<PodcastEpisode>({} as PodcastEpisode);
-  const { itemList: podcast, saveItem, fetchItems } = useLocalStorage<PodcastDetail>(`PodcastDetail-${id}`, {} as PodcastDetail);
+  const [source, setSource] = useState<string>();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if (id === undefined || episodeId === undefined) {
+    if (episodeId === undefined) {
       setNotfound(true);
       return;
     }
 
-    const getPodcastDetail = async () => {
-      updateLoading(true);
-      const res: PodcastDetail = await fetchItems();
-      const active = res.episodes[episodeId];
-
-      setActiveEpisode(active);
-      if (Object.keys(res).length === 0) {
-        try {
-          const podcastDetail = await fetchPodcastDetail(id);
-          if (Object.keys(podcastDetail).length === 0) {
-            //delete local storage
-            console.log('Delete local storage');
-            setNotfound(true);
-          } else {
-            saveItem(podcastDetail);
-            const active = podcastDetail.episodes[episodeId];
-            setActiveEpisode(active);
-          }
-        } catch (error) {
-          console.log('Delete local storage');
-        }
+    if (podcast !== undefined) {
+      const active = podcast.episodes[episodeId];
+      if (active === undefined) {
+        setNotfound(true);
+        return;
       }
-      updateLoading(false);
-    };
-    getPodcastDetail();
-  }, []);
+      setActiveEpisode(active);
+      updateEpisode(active.episodeUrl);
+    }
+  }, [podcast]);
+
+  const updateEpisode = (source: string) => {
+    setSource(source);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (notfound || Object.keys(podcast).length === 0) {
+  if (notfound) {
     return <div>Not found</div>;
   }
 
   return (
-    <div className="flex gap-40">
-      <PodcastInfoCard
-        id={id}
-        image={podcast.image}
-        title={podcast.title}
-        author={podcast.author}
-        description={podcast?.description}
-      />
-      <section className="w-9/12">
-        <AudioPlayer
-          title={activeEpisode?.trackName}
-          description={activeEpisode?.description}
-          episodeUrl={activeEpisode?.episodeUrl}
-        />
-      </section>
-    </div>
+    <section>
+      <div className="shadow-xl p-5 mb-12">
+        <h5 className="font-bold text-xl mb-3">{activeEpisode?.trackName}</h5>
+        <p className="mb-4 text-sm" dangerouslySetInnerHTML={{ __html: activeEpisode?.description }}></p>
+        <audio ref={audioRef} controls className="w-full h-8">
+          <source src={source} />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </section>
   );
 };
 

@@ -33,6 +33,10 @@ export const fetchPodcastDetail = async (id:number):Promise<PodcastDetail> => {
     }
 
     const {results}:{results:any} = await response.json();
+    if(!results || results.length === 0) {
+      throw new Error('Ocurrio un error');
+    }
+
     const podcast:Podcast = {
       id : results[0].collectionId,
       title : results[0].collectionName,
