@@ -31,3 +31,13 @@ audio::-webkit-media-controls-current-time-display,
 audio::-webkit-media-controls-time-remaining-display {
   color: #FFF;
 }
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0,0,0,.3);
+}
